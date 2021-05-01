@@ -141,17 +141,23 @@ formElement.addEventListener("submit",e=>{
         
         if(!regexCardNum){
         e.preventDefault();                     //validates card number 
-        cardNumber.style.borderColor='red';
+        isNotValid(cardNumber);                 //calls 'isNotValid' function if not valid
+        }else{
+            isValid(cardNumber);                //calls 'isValid' function if  valid
         } 
 
         if(!regexZip){
             e.preventDefault();                //validates zip code 
-            zipCode.style.borderColor='red';
+            isNotValid(zipCode);               //calls 'isNotValid' function if not valid
+            }else{
+                isValid(zipCode);              //calls 'isValid' function if  valid
             }
 
             if(!regexCvv){
                 e.preventDefault();                //validates cvv number 
-                cvInput.style.borderColor='red';
+                isNotValid(cvInput);               //calls 'isNotValid' function if not valid
+                }else{
+                    isValid(cvInput);             //calls 'isValid' function if valid
                 }
     }
 })
@@ -172,4 +178,25 @@ for(let i = 0; i < checkBox.length; i++){
     
 
 
+}
+
+
+  /*********************VALIDATION FUNCTIONS********************************* */
+
+
+function isNotValid(arr){
+    let targetElement=arr.parentElement;
+   targetElement.classList.add('not-valid');
+   targetElement.classList.remove('valid');
+
+   targetElement.lastElementChild.style.display='block';
+}
+
+
+function isValid(arr){
+    let targetElement=arr.parentElement;
+   targetElement.classList.remove('not-valid');
+   targetElement.classList.add('valid');
+
+   targetElement.lastElementChild.style.display='none';
 }
