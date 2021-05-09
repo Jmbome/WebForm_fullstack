@@ -17,7 +17,8 @@ const zipCode = document.getElementById('zip');
 const cvInput = document.getElementById('cvv');
 const formElement = document.querySelector('form');
 const checkBox = document.querySelectorAll('input[type=checkbox]');
-
+const activitiesHint = document.getElementById('activities-hint');
+const activitiesBox = document.getElementById('activities-box');
 /*auto focus on Name input*/
 nameInput.focus();
 
@@ -90,6 +91,9 @@ RegisteredField.addEventListener('change', e => {
 payPal.style.display = 'none';  //hides option by default 
 bitCoin.style.display = 'none'; // hide option by default
 
+const defaultOption=document.querySelector('option[value="select method"]');
+defaultOption.textContent='Credit Card';
+
 /*Listens to changes in the payment method
  automatically switches to payment type selected */
 paymentMethod.addEventListener('change', e => {
@@ -113,46 +117,54 @@ paymentMethod.addEventListener('change', e => {
 
 
 formElement.addEventListener("submit", e => {
-    /**Listens to name input value */
+    const regexEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value);
     const regexName = /^[a-zA-Z ]{1,30}$/.test(nameInput.value);
+
+    /**Listens to name input value */
     if (!regexName) {
         e.preventDefault();
-        nameInput.style.borderColor = 'red';
+        isNotValid(nameInput);
+    }else {
+        isValid(nameInput);                //calls 'isValid' function if  valid
     }
 
     /**listens to email input value */
-    const regexEmail = /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(emailInput.value);
-    if (!regexEmail) {
+     if (!regexEmail) {
         e.preventDefault();
-        emailInput.style.borderColor = 'red';
+        isNotValid(emailInput);
+    }else {
+        isValid(emailInput);                //calls 'isValid' function if  valid
     }
 
     /**listens to selected activity */
-    if (!totalCost) {
+     if(!totalCost) {
         e.preventDefault();
-        alert('Select at least one activity');
+        activitiesHint.style.display='block';
+        isNotValid(activitiesBox);
+    }else {
+        isValid(activitiesBox);                //calls 'isValid' function if  valid
     }
 
     /**listens to payment method */
-    if (creditCard) {
+    if(creditCard.style.display===""){
         const regexCardNum = /^\d{13,16}$/.test(cardNumber.value);
         const regexZip = /^\d{5}$/.test(zipCode.value);
         const regexCvv = /^\d{3}$/.test(cvInput.value);
-
+    
         if (!regexCardNum) {
             e.preventDefault();                     //validates card number 
             isNotValid(cardNumber);                 //calls 'isNotValid' function if not valid
         } else {
             isValid(cardNumber);                //calls 'isValid' function if  valid
         }
-
+    
         if (!regexZip) {
             e.preventDefault();                //validates zip code 
             isNotValid(zipCode);               //calls 'isNotValid' function if not valid
         } else {
             isValid(zipCode);              //calls 'isValid' function if  valid
         }
-
+    
         if (!regexCvv) {
             e.preventDefault();                //validates cvv number 
             isNotValid(cvInput);               //calls 'isNotValid' function if not valid
@@ -160,9 +172,12 @@ formElement.addEventListener("submit", e => {
             isValid(cvInput);             //calls 'isValid' function if valid
         }
     }
-})
+
+});
 
 
+    
+ 
 
 /************************Accessibility****************************/
 
@@ -190,6 +205,7 @@ function isNotValid(arr) {
     targetElement.classList.remove('valid');
 
     targetElement.lastElementChild.style.display = 'block';
+    
 }
 
 
